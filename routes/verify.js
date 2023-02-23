@@ -35,9 +35,12 @@ router.post('/', async (req, res) => {
 
 try {
     const existingMail = await verify.find({mail: to});
-    if ((existingMail.length >= 3) && waf) {
-        res.status(400).send('Too many OTP requests for this email');
-        return;
+    console.log(existingMail.length);
+    if ((existingMail.length >= 1) && waf) {
+        //res.status(400).send('Too many OTP requests for this email');
+        //return;
+        //clean up duplicate
+        await verify.deleteMany({mail: to});
     }
 } catch (err) {
     res.status(500).send(err);
