@@ -32,7 +32,7 @@ catch(e)
 };
 
 //server 
-var port = 3000;
+var port = 3002;
 app.listen(port, () => {
     console.log("server listening on port:" + port);
 });
