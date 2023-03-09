@@ -16,7 +16,7 @@ const verifypath=require('./routes/verify');
 
 //routes
 //local
-app.use("/verify",verifypath);
+app.use("/otp",verifypath);
 
 //remote
 
