@@ -84,13 +84,13 @@ router.post('/verify',async (req,res)=> {
     const otp=req.body.otp;
    const mails =  await verify.findOne({mail: to});
    if (!mails) {
-    res.send("otp not found ,try to resend").status(200);
+    res.status(406).send("otp not found ,try to resend");
     return ;
    }
 
    try {
     const existingMail = await verify.find({mail: to});
-    if ((existingMail.length >= 2) && waf) {
+    if ((existingMail.length > 1) && waf) {
         res.status(400).send('Too many OTP requests sended clearing=> need to send again');
         return;
     }
@@ -107,11 +107,9 @@ router.post('/verify',async (req,res)=> {
 
    }
    else{
-    res.send("failed: otp not valid ").status(400);
+    res.status(406).send("failed: otp not valid");
    }
-
-  
-   
+ 
 });
 
 
