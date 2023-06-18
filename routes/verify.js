@@ -81,7 +81,7 @@ transporter.sendMail(mailOptions, async function(error, info){
 
 router.post('/verify',async (req,res)=> {
     const to=req.body.from;
-    const otp=req.body.otp;
+    const otp=parseInt(req.body.otp);
    const mails =  await verify.findOne({mail: to});
    if (!mails) {
     res.status(406).send("otp not found ,try to resend");
@@ -91,6 +91,7 @@ router.post('/verify',async (req,res)=> {
    try {
     const existingMail = await verify.find({mail: to});
     if ((existingMail.length > 1) && waf) {
+        const re = await verify.deleteMany({mail: to});
         res.status(400).send('Too many OTP requests sended clearing=> need to send again');
         return;
     }
@@ -100,9 +101,10 @@ router.post('/verify',async (req,res)=> {
 }
 
    //console.log(mails);
-   const otpsend= mails.otp;
+   const otpsend= parseInt(mails.otp);
    if (otp === otpsend) {
-    const re = await verify.deleteMany({mail: to});
+    //const re = await verify.deleteMany({mail: to});
+       await verify.deleteMany({mail: to});
     res.send("success: login successfully ").status(200);
 
    }
